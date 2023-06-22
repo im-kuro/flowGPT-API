@@ -25,11 +25,13 @@ class flowGPT():
 		})
 
 
-	def searchPromt(self, seachQ: str) -> json:
+	def searchPromt(self, tag: str = "null", sort: str = "null",seachQ: str = "null") -> json:
 		"""searches the database for a promt
 
-		Args:
-			seachQ (str): the type of promt you want to search for
+		Args:			
+  			tag (str, optional): tags you want to include ex. -> ui design, code, software_development, marketing ect. Defaults to "null".
+			sort (str, optional): sort by ex. most-popular, trending, most-saved, latest ect. Defaults to "null".
+			seachQ (str, optional): what you want to search for. Defaults to "null".
 
 		Returns:
 			json: json response from the server
@@ -37,8 +39,8 @@ class flowGPT():
 		data = {
 			"0": {
 				"json": {
-					"tag": "null",
-					"sort": "null",
+					"tag": tag,
+					"sort": sort,
 					"q": seachQ,
 					"language": "en"
 				},
@@ -56,6 +58,40 @@ class flowGPT():
 		}
 		return self.session.get(f"https://flowgpt.com/api/trpc/prompt.getPrompts?batch=1&input={urllib.parse.quote(json.dumps(data))}").json()
 
+	def searchCollections(self, tag: str = "null", sort: str = "null", seachQ: str = "null") -> json:
+		"""searches collections for prompt collections
+
+		Args:
+  			tag (str, optional): tags you want to include ex. -> ui design, code, software_development, marketing ect. Defaults to "null".
+			sort (str, optional): sort by ex. most-popular, trending, most-saved, latest ect. Defaults to "null".
+			seachQ (str, optional): what you want to search for. Defaults to "null".
+
+		Returns:
+			json: _description_
+		"""
+		data = {
+			"0": {
+				"json": {
+					"tag": tag,
+					"sort": sort,
+					"q": seachQ,
+					"language": "en"
+				},
+				"meta": {
+					"values": {
+						"tag": [
+							"undefined"
+						],
+						"sort": [
+							"undefined"
+						]
+					}
+				}
+			}
+		}
+		return self.session.get(f"https://flowgpt.com/api/trpc/collection.getCollections?batch=1&input={urllib.parse.quote(json.dumps(data))}").json()
+
+ 
 	def getFeaturedPromts (self) -> json:
 		"""gets the current featured promts
 
@@ -74,22 +110,6 @@ class flowGPT():
 		"""
 		return self.session.get(f"https://flowgpt.com/api/trpc/collection.getFeaturedCollections?batch=1&input={data}").json()
 
-	def getCollections(self) -> json:
-		data = """
-		{
-			"0":{
-				"json":null, 
-				"meta":{
-					"values":[
-						"undefined"
-					]
-				}
-			}
-		}
-		"""
-		return self.session.get(f"https://flowgpt.com/api/trpc/collection.getCollections?batch=1&input={data}").json()
-	
-  
-  
+
   
   
